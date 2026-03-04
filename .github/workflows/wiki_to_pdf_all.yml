@@ -1,0 +1,141 @@
+name: Generate PDF from Wiki (All)
+
+on:
+  # schedule:
+  #   - cron: '0 15 * * *'
+  workflow_dispatch:
+  # repository_dispatch:
+  #   types: [wiki-updated]
+
+env:
+  REPO_OWNER: RobomationLAB 
+  REPO_NAME: User_Guide_EN 
+  WIKI_REPO_NAME: User_Guide_EN.wiki
+  PDF_FILENAME: User_Guide_Wiki_EN.pdf
+  COMMITTER_NAME: github-actions[bot] 
+  COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
+  BRANCH: main
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Clone Wiki repository
+        run: |
+          git clone https://${{ secrets.GH_PAT }}@github.com/${{ env.REPO_OWNER }}/${{ env.WIKI_REPO_NAME }}.git wiki
+          cd wiki
+          git config user.name "${{ env.COMMITTER_NAME }}"
+          git config user.email "${{ env.COMMITTER_EMAIL }}"
+      - name: Cache LaTeX packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            /usr/share/texlive
+            /usr/share/texmf
+          key: ${{ runner.os }}-texlive-${{ hashFiles('**/*.md') }}
+          restore-keys: |
+            ${{ runner.os }}-texlive-
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pandoc \
+            texlive-xetex \
+            texlive-fonts-recommended \
+            texlive-lang-cjk \
+            texlive-latex-extra \
+            texlive-lang-chinese \
+            lmodern \
+            fonts-noto-cjk
+      - name: Merge Wiki files and download images
+        run: |
+          cd wiki
+          echo "# Wiki Documentation" > combined.md
+          echo "" >> combined.md
+          echo "# Every Wiki Documents" >> combined.md
+          echo "" >> combined.md
+          echo "---" >> combined.md
+          echo "" >> combined.md
+          mkdir -p downloaded_images
+          find . -name "*.md" ! -name "combined.md" ! -path "./.git/*" -print0 \
+            | sort -z \
+            | while IFS= read -r -d '' file; do
+                filename=$(basename "$file" .md)
+                echo "" >> combined.md
+                echo "## $filename" >> combined.md
+                echo "" >> combined.md
+                echo "---" >> combined.md
+                echo "" >> combined.md
+                cat "$file" >> combined.md
+              done
+          grep -oP '!\[.*?\]\(\K(https?://[^)]+)' combined.md \
+            | sort -u \
+            | while read -r url; do
+                filename=$(echo "$url" | md5sum | cut -d' ' -f1)
+                extension="${url##*.}"
+                [ ${#extension} -gt 4 ] && extension="jpg"
+                curl -L -s --max-time 10 "$url" \
+                  -o "downloaded_images/${filename}.${extension}" || true
+                if [ -f "downloaded_images/${filename}.${extension}" ]; then
+                  sed -i "s|$url|downloaded_images/${filename}.${extension}|g" combined.md
+                fi
+              done
+      - name: Create custom font LaTeX header
+        run: |
+          cd wiki
+          cat > font-custom.tex << 'EOF'
+          % Package for any font size
+          \usepackage{anyfontsize}
+          % Code highlighting and verbatim - 5pt font
+          \usepackage{fancyvrb}
+          \usepackage{fvextra}
+          % Define Highlighting environment for pandoc code blocks - 5pt
+          \DefineVerbatimEnvironment{Highlighting}{Verbatim}{
+            % fontsize=\fontsize{5pt}{6pt}\selectfont,
+            breaklines=true,
+            breaksymbolleft={},
+            showspaces=false,
+            showtabs=false,
+            commandchars=\\\{\}
+          }
+          % Override verbatim environment - 5pt
+          % \fvset{fontsize=\fontsize{5pt}{6pt}\selectfont}
+          % Inline code - 5pt font
+          \let\oldtexttt\texttt
+          % \renewcommand{\texttt}[1]{{\fontsize{5pt}{6pt}\selectfont\oldtexttt{#1}}}
+          EOF
+      - name: Generate PDF
+        run: |
+          cd wiki
+          pandoc combined.md \
+            --pdf-engine=xelatex \
+            -V mainfont="Noto Sans CJK KR" \
+            -V sansfont="Noto Sans CJK KR" \
+            -V monofont="Noto Sans Mono CJK KR" \
+            -V CJKmainfont="Noto Sans CJK KR" \
+            -V CJKsansfont="Noto Sans CJK KR" \
+            -V CJKmonofont="Noto Sans Mono CJK KR" \
+            -H font-custom.tex \
+            -V geometry:margin=1.5cm \
+            -V linestretch=1.5 \
+            -V fontsize=11pt \
+            --highlight-style=tango \
+            -o combined.pdf
+      - name: Commit PDF to repository
+        run: |
+          mv wiki/combined.pdf $PDF_FILENAME
+          git config user.name "${COMMITTER_NAME}"
+          git config user.email "${COMMITTER_EMAIL}"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${REPO_OWNER}/${REPO_NAME}.git
+          git fetch origin
+          git pull origin $BRANCH --rebase || true
+          git add $PDF_FILENAME
+          if ! git diff --staged --quiet; then
+            git commit -m "Update Wiki to PDF"
+            git push origin $BRANCH
+          fi
