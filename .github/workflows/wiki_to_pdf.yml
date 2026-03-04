@@ -109,7 +109,7 @@ jobs:
       - name: Generate PDFs
         run: |
           set -euo pipefail
-
+          
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
           
@@ -138,7 +138,7 @@ jobs:
           RAW_PREFIXES = [
             "https://raw.githubusercontent.com/RobomationLAB/User_Guide_EN/",
           ]
-
+          
           REMOTE_DIR = "assets/__remote"
           os.makedirs(REMOTE_DIR, exist_ok=True)
           
@@ -148,14 +148,14 @@ jobs:
               p = os.path.join(root, f).replace("\\", "/")
               for norm in ("NFC", "NFD"):
                 asset_map[unicodedata.normalize(norm, p)] = p
-
+                
           def normalize_path(p: str) -> str:
             for norm in ("NFC", "NFD"):
                 cand = unicodedata.normalize(norm, p)
                 if cand in asset_map:
                     return asset_map[cand]
             return p
-
+            
           def guess_ext_from_content_type(ct: str) -> str:
             ct = (ct or "").lower()
             if "image/png" in ct: return ".png"
@@ -165,7 +165,7 @@ jobs:
             if "image/svg+xml" in ct: return ".svg"
             if "application/pdf" in ct: return ".pdf"
             return ""
-
+            
           def download_remote(url: str) -> str:
             url = url.replace("\r", "").replace("\n", "").strip()
         
@@ -176,7 +176,7 @@ jobs:
             for ext in [path_ext, ".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".pdf"]:
                 if ext and os.path.exists(f"{REMOTE_DIR}/{h}{ext}"):
                     return f"{REMOTE_DIR}/{h}{ext}"
-        
+                    
             last_err = None
             for attempt in range(3):
                 try:
@@ -341,7 +341,7 @@ jobs:
 
           # -----------------------------------------
           # RobomationLAB-Coding-Guide.pdf
-          GUIDE_PAGES=("Coding-Guide" "Coding-Rule" "Custom-Function")
+          GUIDE_PAGES=("Coding Guide" "Coding Rule" "Custom Function")
           
           echo "# RobomationLAB Coding Guide" > RobomationLAB-Coding-Guide.md
           echo "" >> RobomationLAB-Coding-Guide.md
@@ -361,7 +361,7 @@ jobs:
           
           # -----------------------------------------
           # Components-and-Instructions.pdf
-          USAGE_PAGES=("Top-Menu" "Editor" "Preview")
+          USAGE_PAGES=("Top Menu" "Editor" "Preview")
           
           echo "# Components and Instructions" > Components-and-Instructions.md
           echo "" >> Components-and-Instructions.md
@@ -381,7 +381,7 @@ jobs:
           
           # -----------------------------------------
           # Basic-Blocks.pdf
-          BLOCK_PAGES=("Logic" "Conditional-Statement" "Loops" "Math" "Text" "Lists" "Color" "Audio" "Control" "Variables" "Functions" "Others")
+          BLOCK_PAGES=("Logic" "Conditional Statement" "Loops" "Math" "Text" "Lists" "Color" "Audio" "Control" "Variables" "Functions" "Others")
           
           echo "# Basic Blocks" > Basic-Blocks.md
           echo "" >> Basic-Blocks.md
