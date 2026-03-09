@@ -314,8 +314,14 @@ jobs:
             local IN_MD="$1"
             local OUT_PDF="$2"
             local TMP_MD=".__tmp_pdf__.md"
+
+            echo "===== BUILDING: $IN_MD -> $OUT_PDF ====="
           
             SRC="$IN_MD" OUT="$TMP_MD" preprocess_md "$IN_MD" "$TMP_MD"
+
+            echo "===== HEAD OF $TMP_MD ====="
+            nl -ba "$TMP_MD" | sed -n '1,30p'
+            echo "==========================="
           
             pandoc "$TMP_MD" \
               --from markdown+raw_attribute-yaml_metadata_block \
