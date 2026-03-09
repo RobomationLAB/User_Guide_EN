@@ -322,12 +322,9 @@ jobs:
               --from markdown+raw_attribute \
               --resource-path=".:./assets" \
               --pdf-engine=xelatex \
-              -V mainfont="Noto Sans CJK KR" \
-              -V sansfont="Noto Sans CJK KR" \
-              -V monofont="Noto Sans Mono CJK KR" \
-              -V CJKmainfont="Noto Sans CJK KR" \
-              -V CJKsansfont="Noto Sans CJK KR" \
-              -V CJKmonofont="Noto Sans Mono CJK KR" \
+              -V mainfont="Noto Sans" \
+              -V sansfont="Noto Sans" \
+              -V monofont="Noto Sans Mono" \
               -H font-custom.tex \
               -V geometry:margin=1.5cm \
               -V linestretch=1.5 \
