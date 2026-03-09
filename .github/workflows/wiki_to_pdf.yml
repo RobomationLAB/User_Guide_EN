@@ -108,7 +108,7 @@ jobs:
 
       - name: Generate PDFs
         run: |
-          # set -euo pipefail
+          set -euo pipefail
           
           export LANG=C.UTF-8
           export LC_ALL=C.UTF-8
