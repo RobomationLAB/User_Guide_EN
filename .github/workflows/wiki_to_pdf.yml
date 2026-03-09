@@ -327,10 +327,10 @@ jobs:
               --from markdown+raw_attribute-yaml_metadata_block \
               --resource-path=".:./assets" \
               --pdf-engine=xelatex \
-              --include-in-header=font-custom.tex \
               -V mainfont="Noto Sans" \
               -V sansfont="Noto Sans" \
               -V monofont="Noto Sans Mono" \
+              -H font-custom.tex \
               -V geometry:margin=1.5cm \
               -V linestretch=1.5 \
               -V fontsize=11pt \
@@ -359,7 +359,7 @@ jobs:
             fi
           done
           
-          build_pdf "RobomationLAB-Coding-Guide.md" "RobomationLAB-Coding-Guide.md"
+          build_pdf "RobomationLAB-Coding-Guide.md" "RobomationLAB-Coding-Guide.pdf"
           
           # -----------------------------------------
           # Components-and-Instructions.pdf
