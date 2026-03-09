@@ -341,7 +341,7 @@ jobs:
 
           # -----------------------------------------
           # RobomationLAB-Coding-Guide.pdf
-          GUIDE_PAGES=("Coding Guide" "Coding Rule" "Custom Function")
+          GUIDE_PAGES=("Coding-Guide" "Coding-Rule" "Custom-Function")
           
           echo "# RobomationLAB Coding Guide" > RobomationLAB-Coding-Guide.md
           echo "" >> RobomationLAB-Coding-Guide.md
@@ -361,7 +361,7 @@ jobs:
           
           # -----------------------------------------
           # Components-and-Instructions.pdf
-          USAGE_PAGES=("Top Menu" "Editor" "Preview")
+          USAGE_PAGES=("Top-Menu" "Editor" "Preview")
           
           echo "# Components and Instructions" > Components-and-Instructions.md
           echo "" >> Components-and-Instructions.md
@@ -381,7 +381,7 @@ jobs:
           
           # -----------------------------------------
           # Basic-Blocks.pdf
-          BLOCK_PAGES=("Logic" "Conditional Statement" "Loops" "Math" "Text" "Lists" "Color" "Audio" "Control" "Variables" "Functions" "Others")
+          BLOCK_PAGES=("Logic" "Conditional-Statement" "Loops" "Math" "Text" "Lists" "Color" "Audio" "Control" "Variables" "Functions" "Others")
           
           echo "# Basic Blocks" > Basic-Blocks.md
           echo "" >> Basic-Blocks.md
