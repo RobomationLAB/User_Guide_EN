@@ -321,7 +321,6 @@ jobs:
               --from markdown+raw_attribute \
               --resource-path=".:./assets" \
               --pdf-engine=xelatex \
-              --include-in-header=font-custom.tex \
               -V mainfont="Noto Sans" \
               -V sansfont="Noto Sans" \
               -V monofont="Noto Sans Mono" \
