@@ -348,7 +348,7 @@ jobs:
               echo "" >> RobomationLAB-Coding-Guide.md
               cat "$file" >> RobomationLAB-Coding-Guide.md
               echo "" >> RobomationLAB-Coding-Guide.md
-              echo "---" >> RobomationLAB-Coding-Guide.md
+              # echo "---" >> RobomationLAB-Coding-Guide.md
               echo "" >> RobomationLAB-Coding-Guide.md
             fi
           done
@@ -368,7 +368,7 @@ jobs:
               echo "" >> Components-and-Instructions.md
               cat "$file" >> Components-and-Instructions.md
               echo "" >> Components-and-Instructions.md
-              echo "---" >> Components-and-Instructions.md
+              # echo "---" >> Components-and-Instructions.md
               echo "" >> Components-and-Instructions.md
             fi
           done
@@ -388,7 +388,7 @@ jobs:
               echo "" >> Basic-Blocks.md
               cat "$file" >> Basic-Blocks.md
               echo "" >> Basic-Blocks.md
-              echo "---" >> Basic-Blocks.md
+              # echo "---" >> Basic-Blocks.md
               echo "" >> Basic-Blocks.md
             fi
           done
