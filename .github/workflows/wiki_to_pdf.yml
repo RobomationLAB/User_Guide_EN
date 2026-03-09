@@ -318,9 +318,10 @@ jobs:
             SRC="$IN_MD" OUT="$TMP_MD" preprocess_md "$IN_MD" "$TMP_MD"
           
             pandoc "$TMP_MD" \
-              --from markdown+raw_attribute \
+              --from markdown+raw_attribute-yaml_metadata_block \
               --resource-path=".:./assets" \
               --pdf-engine=xelatex \
+              --include-in-header=font-custom.tex \
               -V mainfont="Noto Sans" \
               -V sansfont="Noto Sans" \
               -V monofont="Noto Sans Mono" \
