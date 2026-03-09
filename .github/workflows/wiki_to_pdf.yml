@@ -405,7 +405,16 @@ jobs:
           for file in *.md; do
             base=$(basename "$file" .md)
           
-            if [[ " ${GUIDE_PAGES[*]} " =~ " ${base} " || " ${USAGE_PAGES[*]} " =~ " ${base} " || " ${BLOCK_PAGES[*]} " =~ " ${base} " || "$base" = "Home" || "$base" = "_Sidebar" ]]; then
+            if [[ \
+              " ${GUIDE_PAGES[*]} " =~ " ${base} " || \
+              " ${USAGE_PAGES[*]} " =~ " ${base} " || \
+              " ${BLOCK_PAGES[*]} " =~ " ${base} " || \
+              "$base" = "Home" || \
+              "$base" = "_Sidebar" || \
+              "$base" = "RobomationLAB-Coding-Guide" || \
+              "$base" = "Components-and-Instructions" || \
+              "$base" = "Basic-Blocks" \
+            ]]; then
               continue
             fi
           
